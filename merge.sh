@@ -60,13 +60,12 @@ echo "input=$ret"
 case $ret in
 N | n)
 # 判断version是否正常
-pom_version='-SNAPSHOT';
 if [ "${to_br}" == "beta" ] || [ "${to_br}" == "release" ]
 then
-pom_version='-RELEASE-SNAPSHOT';
+sed -i '' 's#\<maven\.dependency\.env\>[^<]*\<\/maven\.dependency\.env\>$#<maven.dependency.env>-RELEASE-SNAPSHOT</maven.dependency.env>#' pom.xml
+else
+sed -i '' 's#\<maven\.dependency\.env\>[^<]*\<\/maven\.dependency\.env\>$#<maven.dependency.env>-SNAPSHOT</maven.dependency.env>#' pom.xml
 fi
-echo "pom_version=${pom_version}"
-sed -i '' 's#\<maven\.dependency\.env\>[^<]*\<\/maven\.dependency\.env\>$#<maven.dependency.env>${pom_version}</maven.dependency.env>#' pom.xml
 ##echo 1;;
 exec_cmd "mvn deploy -f pom.xml";;
 *)
