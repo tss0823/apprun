@@ -1,0 +1,39 @@
+@startuml
+partition 拉取数据 {
+  (*) --> "获取 爬虫，商品 itemIds"
+  --> "send to MQ (Kafka)"
+
+}
+
+partition 清洗 {
+  --> "receive from MQ (Kafka)"
+  --> "获取 爬虫，商品，评测，图片数据"
+  If  "data is crawler" then
+  --> [yes] "json解析"
+  --> "关键数据的转换（金额，分值等数字）"
+  --> "标题禁用词替换"
+  --> "标题同义词转换"
+  --> "品牌转换"
+  --> "类目转换"
+  --> "属性，SKU同义词替换"
+  else
+  --> [NO] "属性，SKU同义词替换"
+  Endif
+
+}
+
+partition 存储 #gray {
+  --> "获取已有的准备数据"
+  If  "已存在" then
+
+    --> [YES] "批量更新"
+    --> (*)
+    else
+    --> [NO] "批量新增"
+    --> (*)
+    Endif
+
+}
+@enduml
+
+

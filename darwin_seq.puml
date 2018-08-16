@@ -1,0 +1,13 @@
+@startuml
+
+Darwin ->  "Crawler or Item" : 获取数据 (itemIds)
+Darwin -> "MQ (Kafka)" : 发送消息 (itemIds,分页条件等)
+"MQ (Kafka)" -> Darwin : 推送返回消息 (itemIds,分页条件等)
+Darwin -> "Crawler or Item" : 获取所有数据(商品库，评测，评测图片)
+Darwin -> Darwin : 获取已有的准备数据，划分更新和新增准备数据
+Darwin -> "ItemCenter" : 获取品牌，类目
+Darwin -> "Darwin" : 获取基础数据（禁用词，转换类目，同义词）
+Darwin -> Darwin : 解析，校验，转换
+Darwin -> Darwin : 存储（新增或更新）
+
+@enduml

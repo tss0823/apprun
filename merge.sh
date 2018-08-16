@@ -54,6 +54,9 @@ cmd_co_test="git checkout ${to_br}";
 exec_cmd ${cmd_co_test}
 exec_cmd "git pull"
 
+cmd_merge_to_test="git merge ${from_br}"
+exec_cmd ${cmd_merge_to_test}
+
 #mvn deploy,for rpc call
 read -s -p "you want to skip deploy for rpc ?(y/n):" ret
 echo "input=$ret"
@@ -71,9 +74,6 @@ exec_cmd "mvn deploy -f pom.xml";;
 *)
       echo "skipped deploy";;
 esac
-
-cmd_merge_to_test="git merge ${from_br}"
-exec_cmd ${cmd_merge_to_test}
 
 #push test
 read -s -p "you want to push ${to_br}?(y/n):" ret

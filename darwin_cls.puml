@@ -1,0 +1,72 @@
+@startuml
+
+
+interface ReadyDataFetchService{
+    void fetch(); //主动抓取数据
+    void stop();  // 暂停抓取数据操作
+    void clear();  //清空缓存操作
+}
+
+class ReadyDataCrawlerFetchServiceImpl{
+}
+class ReadyDataItemFetchServiceImpl{
+}
+
+class RedisMSServer{
+}
+class KafkaQueueProducer{
+}
+class ReadyDataConfigManager{
+}
+class ReadyDataRpcHelper{
+}
+
+ReadyDataFetchService <|.. ReadyDataCrawlerFetchServiceImpl
+
+ReadyDataFetchService <|.. ReadyDataItemFetchServiceImpl
+
+ReadyDataCrawlerFetchServiceImpl ..> RedisMSServer
+ReadyDataCrawlerFetchServiceImpl ..> KafkaQueueProducer
+ReadyDataCrawlerFetchServiceImpl ..> ReadyDataConfigManager
+ReadyDataCrawlerFetchServiceImpl ..> ReadyDataRpcHelper
+
+
+interface ReadyDataConsumeService{
+
+    Integer getReadyDataType();  //类型
+    void consume(ReadyDataMessage readyDataMessage);  //消费执行
+}
+
+class ReadyDataCrawlerConsumeServiceImpl{
+}
+class ReadyDataItemConsumeServiceImpl{
+}
+
+
+abstract class AbstReadyDataConsumeService{
+}
+
+class DataTransformHelper{
+}
+
+class ReadydataDBHelper{
+}
+class DarwinTaskExecutors{
+}
+
+
+
+ReadyDataConsumeService <|.. AbstReadyDataConsumeService
+
+AbstReadyDataConsumeService <|-- ReadyDataCrawlerConsumeServiceImpl
+
+AbstReadyDataConsumeService <|-- ReadyDataItemConsumeServiceImpl
+
+
+ReadyDataCrawlerConsumeServiceImpl ..> DataTransformHelper
+ReadyDataCrawlerConsumeServiceImpl ..> ReadyDataRpcHelper
+ReadyDataCrawlerConsumeServiceImpl ..> ReadydataDBHelper
+ReadyDataCrawlerConsumeServiceImpl ..> DarwinTaskExecutors
+
+
+@enduml
