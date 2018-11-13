@@ -31,7 +31,8 @@ cmd_co_dev="git checkout ${from_br}"
 
 #check dev branch
 exec_cmd ${cmd_co_dev}
-git pull
+cmd_git_pull="git pull origin ${from_br}"
+exec_cmd ${cmd_git_pull}
 
 #git add . & git commit -a
 cmd_add_and_ci="git add . && git commit -a";
@@ -42,7 +43,7 @@ case $ret in
 N | n)
       echo "$from_br not push";;
 *)
-exec_cmd "git push";;
+exec_cmd "git push origin $from_br";;
 esac
 
 toBranchMap=`echo "${toBrs}" | sed "s/,/ /g"` 
@@ -70,7 +71,9 @@ else
 sed -i '' 's#\<maven\.dependency\.env\>[^<]*\<\/maven\.dependency\.env\>$#<maven.dependency.env>-SNAPSHOT</maven.dependency.env>#' pom.xml
 fi
 ##echo 1;;
-exec_cmd "mvn deploy -f pom.xml";;
+exec_cmd "mvn deploy -f pom.xml"
+## revert pom.xml
+exec_cmd "git checkout pom.xml";;
 *)
       echo "skipped deploy";;
 esac
@@ -83,7 +86,7 @@ N | n)
 echo "your input ${ret},then break!"
 git checkout $from_br;;
 *)
-exec_cmd "git push";;
+exec_cmd "git push origin $to_br";;
 esac
 
 done
